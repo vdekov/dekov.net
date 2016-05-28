@@ -13,6 +13,9 @@ wget -qO - http://nginx.org/keys/nginx_signing.key | sudo apt-key add - > /dev/n
 sudo echo -e "deb http://nginx.org/packages/mainline/ubuntu/ `lsb_release -cs` nginx\ndeb-src http://nginx.org/packages/mainline/ubuntu/ `lsb_release -cs` nginx" | sudo tee /etc/apt/sources.list.d/nginx.list > /dev/null 2>&1
 # Add PHP7 repository to download the latest version
 sudo add-apt-repository -y ppa:ondrej/php > /dev/null 2>&1
+# Add MongoDB repository to download the latest version
+sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10 > /dev/null 2>&1
+echo "deb http://repo.mongodb.org/apt/ubuntu "$(lsb_release -sc)"/mongodb-org/3.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.0.list > /dev/null 2>&1
 sudo apt-get -qq update
 sudo apt-get -qq -y upgrade > /dev/null 2>&1
 
@@ -73,10 +76,14 @@ sudo mysql -u root -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY '
 sudo service mysql restart > /dev/null 2>&1
 sudo /usr/sbin/update-rc.d mysql defaults > /dev/null 2>&1 # launching on boot
 
+echo "Install MongoDB"
+sudo apt-get install -y mongodb-org > /dev/null 2>&1
+sudo sed -i '/bindIp: 127.0.0.1/c #bindIp: 127.0.0.1' /etc/mongod.conf
+
 echo "Add aliases into ~/.bashrc"
 sudo cat >> ~/.bashrc <<EOF
 # Set aliases
-alias box_start='sudo /etc/init.d/nginx restart && sudo /etc/init.d/apache2 restart && pm2 start /var/www/app.js -i 0'
+alias box_start='sudo /etc/init.d/nginx restart && sudo /etc/init.d/apache2 restart && pm2 start /var/www/app.js -i 0 && sudo service mongod restart'
 alias vtop='vtop --theme brew'
 alias node_logs='tail -f /var/log/node/*.log'
 alias node_logs_empty='sudo truncate /var/log/node/*.log -s 0'
