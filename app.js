@@ -1,3 +1,4 @@
+require('marko/node-require').install();
 var fs      = require('fs');
 var logger  = require('./logger');
 var express = require('express');
@@ -10,7 +11,9 @@ process.stdout.write = process.stderr.write = access.write.bind( access );
 app.disable( 'x-powered-by' );
 
 app.get( '/', ( request, response ) => {
-   response.send( 'Hello World (from NodeJS)!' );
+   // response.send( 'Hello World (from NodeJS)!' );
+   var template = require('./views/index.marko');
+   template.render( {}, response );
 });
 
 app.listen( 8081 );

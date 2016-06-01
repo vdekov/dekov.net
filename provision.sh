@@ -59,6 +59,8 @@ npm install > /dev/null 2>&1
 npm install pm2@latest -g > /dev/null 2>&1
 npm install -g vtop > /dev/null 2>&1
 npm install -g speed-test > /dev/null 2>&1
+# marko NPM module throws an error without it...
+npm install esprima > /dev/null 2>&1
 
 echo "Configure NodeJS environment"
 sudo mkdir -p /var/log/node
