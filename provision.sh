@@ -5,6 +5,7 @@ sudo timedatectl set-timezone 'Europe/Sofia'
 echo "Setting www root folder to the shared directory"
 sudo rm -rf /var/www
 sudo ln -fs /vagrant /var/www
+# sudo rm -rf /var/www/node_modules
 sudo chmod -R 644 /var/www
 
 echo "Updating packages list"
@@ -59,8 +60,6 @@ npm install > /dev/null 2>&1
 npm install pm2@latest -g > /dev/null 2>&1
 npm install -g vtop > /dev/null 2>&1
 npm install -g speed-test > /dev/null 2>&1
-# marko NPM module throws an error without it...
-npm install esprima > /dev/null 2>&1
 
 echo "Configure NodeJS environment"
 sudo mkdir -p /var/log/node

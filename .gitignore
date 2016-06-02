@@ -2,3 +2,4 @@ node_modules
 .vagrant
 configs/ssl
 .DS_Store
+*.marko.js
